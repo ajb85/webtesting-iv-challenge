@@ -7,7 +7,7 @@ describe("Users model", () => {
   });
 
   describe("insert()", () => {
-    it.skip("should insert users with data provided", async () => {
+    it("should insert users with data provided", async () => {
       await Users.insert({ username: "test1", password: "asdf" });
       await Users.insert({ username: "test2", password: "asdf" });
       await Users.insert({ username: "test3", password: "asdf" });
