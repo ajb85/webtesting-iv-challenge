@@ -6,11 +6,9 @@ const generateToken = require("../auth/generateToken");
 
 routes.post("/register", async (req, res) => {
   try {
-    console.log(req.body.username && req.body.password);
     if (req.body.username && req.body.password) {
       let account = req.body;
       account.password = bcrypt.hashSync(account.password, 4);
-      console.log(account);
       const newUser = await Users.insert(account);
       res.status(201).json({ newUser });
     } else
@@ -28,7 +26,7 @@ routes.post("/login", async (req, res) => {
       const user = await Users.findBy({ username }).first();
       if (user && bcrypt.compareSync(password, user.password)) {
         const token = generateToken(user);
-        res.status(201).json({ user: user.username, token });
+        res.status(200).json({ user: user.username, token });
       } else {
         res.status(400).json({ message: "Invalid Credentials" });
       }
