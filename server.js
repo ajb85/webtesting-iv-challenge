@@ -12,4 +12,8 @@ server.use(cors());
 
 // setup routes
 
+server.get("/", (req, res) => {
+  res.status(200).json({ serverStatus: "OK" });
+});
+
 module.exports = server;
