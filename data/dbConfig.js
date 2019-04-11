@@ -3,4 +3,4 @@ const config = require("../knexfile.js");
 
 const env = process.env.DB_ENV || "development";
 
-export default knex(config[env]);
+module.exports = knex(config[env]);

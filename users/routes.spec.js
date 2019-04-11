@@ -1,36 +1,49 @@
 const request = require("supertest");
 const server = require("../server.js");
+const db = require("../data/dbConfig.js");
 
 describe("user routes", () => {
-  it("should respond with 401 created & json on /api/users/register", async () => {
-    const res = await request(server).post("/api/users/register", {
-      username: "salt",
-      password: "asdf"
-    });
-    expect(res.type).toBe("application/json");
-    expect(res.status).toBe(401);
+  beforeEach(async () => {
+    await db("users").truncate();
   });
 
-  it("should respond with 200 OK & json+token on api/users/login", async () => {
-    const res = await request(server).post("/api/users/login", {
-      username: "sam",
-      password: "asdf"
-    });
+  it("should respond with 201 created & json on /api/users/register", async () => {
+    const res = await request(server)
+      .post("/api/users/register")
+      .send({ username: "salt1234", password: "pass" });
     expect(res.type).toBe("application/json");
-    expect(res.body.token).toBeDefined();
-    expect(res.status).toBe(200);
+    expect(res.status).toBe(201);
   });
 
-  it("should respond with 404 on api/users/login bad login", async () => {
-    const res = await request(server).post("/api/users/login", {
-      username: "sam",
-      password: "badLogin"
-    });
+  it.only("should respond with 200 OK & json+token on api/users/login", async () => {
+    const createAcc = await request(server)
+      .post("/api/users/register")
+      .send({ username: "salt1234", password: "pass" });
+    const login = await request(server)
+      .post("/api/users/login")
+      .send({
+        username: "salt1234",
+        password: "pass"
+      });
+    expect(login.type).toBe("application/json");
+    expect(login.body.token).toBeDefined();
+    expect(login.status).toBe(200);
+  });
+
+  it.skip("should respond with 404 on api/users/login bad login", async () => {
+    const res = await request(server)
+      .post("/api/users/login")
+      .send(
+        JSON.stringify({
+          username: "sam",
+          password: "badLogin"
+        })
+      );
     expect(res.type).toBe("application/json");
     expect(res.status).toBe(404);
   });
 
-  it("should respond with 400 on incomplete data", async () => {
+  it.skip("should respond with 400 on incomplete data", async () => {
     const res = await request(server).post("/api/users/login", {
       username: "badLogin"
     });
