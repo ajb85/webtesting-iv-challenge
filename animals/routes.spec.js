@@ -14,4 +14,18 @@ describe("animal routes", () => {
     expect(res.type).toBe("application/json");
     expect(res.status).toBe(400);
   });
+
+  it("should return 201 when adding an animal", async () => {
+    const headers = { headers: { Authorization: "string" } };
+    const res = await request(server).post("/api/animals/add", { name: "Cat" });
+    expect(res.type).toBe("application/json");
+    expect(res.body.name).toBe("Cat");
+    expect(res.status).toBe(201);
+  });
+
+  it("should return 204 when removing an animal", async () => {
+    const headers = { headers: { Authorization: "string" } };
+    const res = await request(server).delete("/api/animals/:id", { id: 3 });
+    expect(res.status).toBe(204);
+  });
 });
