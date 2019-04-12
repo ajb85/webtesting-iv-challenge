@@ -4,6 +4,7 @@ const cors = require("cors");
 
 // import routes
 const userRoutes = require("./users/routes.js");
+const animalRoutes = require("./animals/routes.js");
 
 const server = express();
 
@@ -13,6 +14,7 @@ server.use(cors());
 
 // setup routes
 server.use("/api/users", userRoutes);
+server.use("/api/animals", animalRoutes);
 
 server.get("/", (req, res) => {
   res.status(200).json({ serverStatus: "OK" });
